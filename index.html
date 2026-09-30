@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e7c7b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ریکامپ">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>ریکامپ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap">
+<style>
+  :root {
+    --bg: #eef1f4;
+    --surface: #ffffff;
+    --surface-2: #e4e9ee;
+    --fg: #16202a;
+    --muted: #5b6b7a;
+    --line: #d2dae1;
+    --accent: #0e7c7b;
+    --accent-ink: #ffffff;
+    --accent-soft: #d6efec;
+    --good: #2e8b4f;
+    --warn: #b0771a;
+    --bad: #c23b2b;
+    --font: 'Vazirmatn', system-ui, 'Segoe UI', Tahoma, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1418; --surface: #171e24; --surface-2: #202932; --fg: #e6edf3; --muted: #93a1ad; --line: #2a353f;
+      --accent: #3cc7b7; --accent-ink: #06201d; --accent-soft: #123430;
+      --good: #5cc07c; --warn: #d9a441; --bad: #e5675a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1418; --surface: #171e24; --surface-2: #202932; --fg: #e6edf3; --muted: #93a1ad; --line: #2a353f;
+    --accent: #3cc7b7; --accent-ink: #06201d; --accent-soft: #123430;
+    --good: #5cc07c; --warn: #d9a441; --bad: #e5675a;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { height: 100%; background: var(--bg); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-text-size-adjust: 100%; }
+  body { margin: 0; min-height: 100%; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.75; }
+  #app { min-height: 100%; direction: rtl; }
+  h1, h2, h3 { margin: 0; line-height: 1.35; text-wrap: balance; }
+  h2 { font-size: 20px; font-weight: 800; }
+  h3 { font-size: 16px; font-weight: 700; }
+  p { margin: 0; }
+  ul, ol { margin: 0; padding-inline-start: 20px; }
+  li { margin-block: 4px; }
+  a { color: var(--accent); }
+  .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); padding: 10px 16px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .brand { font-weight: 800; font-size: 17px; }
+  .today { color: var(--muted); font-size: 13px; text-align: left; min-width: 0; }
+  .wrap { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 14px 100px; display: grid; gap: 14px; }
+  .tab { display: grid; gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; min-width: 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .row > * { min-width: 0; }
+  label { font-size: 13px; color: var(--muted); }
+  input, textarea, button, select { font: inherit; color: inherit; }
+  input[type="date"], input[type="number"], textarea { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--fg); }
+  input[type="number"] { text-align: center; font-variant-numeric: tabular-nums; -moz-appearance: textfield; }
+  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="date"] { direction: ltr; text-align: center; }
+  textarea { min-height: 64px; resize: vertical; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 700; cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btn.small { padding: 5px 10px; font-size: 13px; }
+  .btn.danger { border-color: var(--bad); color: var(--bad); background: transparent; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; background: var(--surface); color: var(--fg); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+  .weekline { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--fg); font-size: 12px; font-weight: 700; }
+  .phase-note { font-size: 13px; color: var(--muted); }
+  .sess-head h2 { color: var(--accent); }
+  .cardio { font-size: 13px; background: var(--surface-2); border-radius: 10px; padding: 8px 12px; margin-top: 8px; }
+  .ex { display: grid; gap: 8px; }
+  .ex header { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+  .ex-name { display: grid; }
+  .ex-name .fa { font-weight: 700; font-size: 16px; }
+  .ex-name .en { color: var(--muted); font-size: 12px; direction: ltr; text-align: right; letter-spacing: .01em; }
+  .ex-target { font-size: 13px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .star { color: var(--warn); }
+  .cue { font-size: 13px; color: var(--muted); }
+  .last { font-size: 13px; font-variant-numeric: tabular-nums; }
+  .hint { font-size: 13px; padding: 6px 10px; border-radius: 8px; background: var(--surface-2); }
+  .hint.good { background: var(--accent-soft); }
+  .hint.warn { border: 1px solid var(--warn); }
+  .sets { display: grid; gap: 6px; }
+  .set-head, .set-row { display: grid; grid-template-columns: 28px 1fr 1fr; gap: 8px; align-items: center; }
+  .set-head { font-size: 12px; color: var(--muted); text-align: center; }
+  .set-n { text-align: center; color: var(--muted); font-size: 13px; }
+  details.alt { font-size: 13px; color: var(--muted); }
+  details.alt summary { cursor: pointer; color: var(--accent); }
+  .status { font-size: 12px; color: var(--muted); min-height: 18px; }
+  .hist { display: grid; gap: 6px; font-size: 13px; }
+  .hist button { text-align: right; width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; }
+  .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-width: 0; }
+  .tile .v { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.3; }
+  .tile .k { font-size: 12px; color: var(--muted); }
+  .verdict { font-size: 13px; padding: 8px 12px; border-radius: 10px; background: var(--surface-2); }
+  .verdict.good { background: var(--accent-soft); }
+  .verdict.warn { border: 1px solid var(--warn); }
+  .verdict.bad { border: 1px solid var(--bad); }
+  .chart { width: 100%; height: auto; display: block; }
+  .chart text { font-family: var(--font); font-size: 11px; fill: var(--muted); }
+  .chart .grid { stroke: var(--line); stroke-width: 1; }
+  .chart .daily { fill: none; stroke: var(--muted); stroke-width: 1.2; opacity: .8; }
+  .chart .avg { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; }
+  .chart .goal { stroke: var(--warn); stroke-width: 1.2; stroke-dasharray: 5 4; }
+  .chart .dot { fill: var(--accent); }
+  .bodytable { display: grid; gap: 6px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .bodyrow { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .bodyrow:last-child { border-bottom: 0; }
+  .meal h3 { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+  .kcal { font-size: 12px; color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 420px) { .grid2 { grid-template-columns: 1fr; } }
+  .phase-table { display: grid; gap: 6px; font-size: 13px; }
+  .phase-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .phase-row:last-child { border-bottom: 0; }
+  .phase-row b { font-variant-numeric: tabular-nums; }
+  .bottom { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); z-index: 6; }
+  .bottom button { flex: 1; padding: 11px 4px; background: none; border: 0; color: var(--muted); font-weight: 500; font-size: 13px; cursor: pointer; }
+  .bottom button[aria-current="page"] { color: var(--accent); font-weight: 800; }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 12px; }
+  @media (prefers-reduced-motion: no-preference) { .chip, .btn { transition: background .15s, color .15s; } }
+</style>
+</head>
+<body>
+<div id="app" lang="fa" dir="rtl">
+  <header class="top">
+    <div class="brand">ریکامپ</div>
+    <div class="today" id="todayLine"></div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ===== تمرین ===== -->
+    <section id="tab-train" class="tab">
+      <div class="card" style="display:grid;gap:10px">
+        <div class="row" style="justify-content:space-between">
+          <label for="logDate">تاریخ جلسه</label>
+          <div style="width:170px"><input type="date" id="logDate"></div>
+        </div>
+        <div class="weekline" id="weekLine"></div>
+        <div class="phase-note" id="phaseNote"></div>
+        <div class="chips" id="sessionChips" role="group" aria-label="انتخاب جلسه">
+          <button class="chip" data-s="A" aria-pressed="false">یکشنبه · فول‌بادی</button>
+          <button class="chip" data-s="B" aria-pressed="false">سه‌شنبه · بالاتنه</button>
+          <button class="chip" data-s="C" aria-pressed="false">چهارشنبه · پایین‌تنه</button>
+        </div>
+      </div>
+
+      <div class="sess-head" id="sessionHead"></div>
+      <div id="exList" class="tab"></div>
+
+      <div class="card" style="display:grid;gap:10px">
+        <label class="row" style="gap:8px;color:var(--fg)"><input type="checkbox" id="cardioDone"> کاردیوی آخر جلسه انجام شد</label>
+        <label for="note">یادداشت جلسه</label>
+        <textarea id="note" placeholder="خواب دیشب، درد مفصل، حس تمرین، چیزی که باید تغییر کنه…"></textarea>
+        <div class="status" id="saveStatus"></div>
+      </div>
+
+      <details class="card">
+        <summary style="cursor:pointer;font-weight:700">جلسه‌های قبلی</summary>
+        <div class="hist" id="history" style="margin-top:10px"></div>
+      </details>
+    </section>
+
+    <!-- ===== بدن ===== -->
+    <section id="tab-body" class="tab" hidden>
+      <div class="card" style="display:grid;gap:10px">
+        <h2>وزن و اندازه‌ها</h2>
+        <p class="small muted">صبح ناشتا، بعد از دستشویی، قبل از غذا. وزن هر روز؛ دور کمر و گردن هر دو هفته یک بار (روی ناف، شکم شل، آخر بازدم).</p>
+        <div class="row" style="justify-content:space-between">
+          <label for="bodyDate">تاریخ</label>
+          <div style="width:170px"><input type="date" id="bodyDate"></div>
+        </div>
+        <div class="grid2">
+          <div><label for="bw">وزن (کیلو)</label><input type="number" id="bw" inputmode="decimal" step="0.1" min="40" max="200" placeholder="۸۸٫۰"></div>
+          <div><label for="waist">دور کمر (سانت)</label><input type="number" id="waist" inputmode="decimal" step="0.5" min="50" max="200" placeholder="روی ناف"></div>
+          <div><label for="neck">دور گردن (سانت)</label><input type="number" id="neck" inputmode="decimal" step="0.5" min="25" max="60" placeholder="زیر سیب آدم"></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn" id="saveBody" type="button" style="width:100%">ثبت</button></div>
+        </div>
+        <div class="status" id="bodyStatus"></div>
+      </div>
+
+      <div class="tiles" id="bodyTiles"></div>
+      <div class="verdict" id="verdict"></div>
+
+      <div class="card">
+        <h3 style="margin-bottom:8px">روند وزن</h3>
+        <div id="chartWrap"></div>
+        <p class="small muted" style="margin-top:6px">خط پررنگ میانگین ۷ روزه‌ست؛ فقط به اون نگاه کن. خط‌چین هدف ۸۰ کیلوئه.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:8px">ثبت‌ها</h3>
+        <div class="bodytable" id="bodyRows"></div>
+      </div>
+
+      <div class="card" style="display:grid;gap:8px">
+        <h3>پشتیبان‌گیری</h3>
+        <p class="small muted" id="storageLine">داده‌ها فقط روی همین دستگاه و همین مرورگر ذخیره می‌شن. هر چند هفته یک بار فایل پشتیبان بگیر و یه جا نگه دار (مثلاً «پیام‌های ذخیره‌شده»ی تلگرام). همین فایل رو می‌تونی برای بررسی برنامه هم بفرستی.</p>
+        <div class="row">
+          <button class="btn" id="exportBtn" type="button">دانلود فایل پشتیبان</button>
+          <button class="btn ghost" id="importBtn" type="button">بازیابی از فایل</button>
+          <input type="file" id="importFile" accept=".json,application/json" hidden>
+        </div>
+        <div class="status" id="backupStatus"></div>
+      </div>
+    </section>
+
+    <!-- ===== تغذیه ===== -->
+    <section id="tab-food" class="tab" hidden>
+      <h2>تغذیه</h2>
+      <div class="tiles">
+        <div class="tile"><div class="v">۲۲۰۰</div><div class="k">کالری در روز</div></div>
+        <div class="tile"><div class="v">۱۷۵ گرم</div><div class="k">پروتئین (حداقل ۱۶۰)</div></div>
+        <div class="tile"><div class="v">۷۰ گرم</div><div class="k">چربی</div></div>
+        <div class="tile"><div class="v">۲۱۵ گرم</div><div class="k">کربوهیدرات</div></div>
+      </div>
+      <p class="small muted">مصرف روزانه‌ی تو با این سبک زندگی حدود ۲۷۰۰ کالریه. ۵۰۰ کالری کسری یعنی حدود نیم کیلو در هفته. پروتئین ۲ گرم به ازای هر کیلو وزن، که موقع کاهش وزن عضله حفظ شه و سیر بمونی.</p>
+
+      <div class="card meal">
+        <h3>صبحانه <span class="kcal">حدود ۵۰۰ کالری · ۴۰ گرم پروتئین</span></h3>
+        <ul>
+          <li>۳ تخم‌مرغ کامل + ۳ سفیده (املت یا نیمرو با حداکثر ۱ قاشق چای‌خوری روغن، ترجیحاً تابه‌ی نچسب)</li>
+          <li>۵۰ گرم نان سنگک یا بربری (یک کف دست بزرگ)، فقط همین یک وعده نان</li>
+          <li>گوجه، خیار، سبزی: آزاد</li>
+          <li>۱ لیوان شیر کم‌چرب یا ۱۵۰ گرم ماست کم‌چرب</li>
+          <li>چای یا قهوه بدون شکر</li>
+        </ul>
+      </div>
+      <div class="card meal">
+        <h3>ناهار <span class="kcal">حدود ۶۵۰ کالری · ۵۰ گرم پروتئین</span></h3>
+        <ul>
+          <li>۱۵۰ گرم مرغ پخته بدون پوست (سینه یا ران)، یا ۱۲۰ گرم گوشت قرمز کم‌چرب، یا ۱۵۰ گرم ماهی</li>
+          <li>۱۵۰ گرم برنج پخته (یک کفگیر معمولی، وزن کن). ته‌دیگ نه.</li>
+          <li>اگه خورشه: سهم گوشت خودت رو دو برابر بگیر و روغن رویش رو نریز. برنج همون ۱۵۰ گرم.</li>
+          <li>سالاد شیرازی یا سبزی خوردن آزاد؛ ۱۰۰ گرم ماست کم‌چرب</li>
+        </ul>
+      </div>
+      <div class="card meal">
+        <h3>قبل از تمرین (۱٫۵ تا ۲ ساعت قبل) <span class="kcal">حدود ۳۰۰ کالری · ۲۵ گرم پروتئین</span></h3>
+        <ul>
+          <li>۲۰۰ گرم ماست یونانی یا چکیده‌ی کم‌چرب + ۱ موز، یا</li>
+          <li>۱ قوطی تن ماهی (آبش گرفته) + ۱ نان تست + گوجه، یا</li>
+          <li>۱ اسکوپ پروتئین وی + ۱ میوه (اگه خریدی)</li>
+          <li>روزهای بدون تمرین: همین وعده رو عصر بخور.</li>
+        </ul>
+      </div>
+      <div class="card meal">
+        <h3>شام (حداکثر تا ۳ ساعت قبل از خواب) <span class="kcal">حدود ۵۲۰ کالری · ۴۵ گرم پروتئین</span></h3>
+        <ul>
+          <li>۱۵۰ گرم مرغ، ماهی یا گوشت؛ یا ۲ تخم‌مرغ + ۴ سفیده</li>
+          <li>۱۰۰ گرم برنج پخته، یا ۱ سیب‌زمینی متوسط، یا ۲۰۰ گرم عدسی</li>
+          <li>سبزیجات پخته یا سالاد، تا جایی که سیر شی</li>
+          <li>اگه ساعت ۳ می‌خوابی، شام تا ساعت ۱۲ تموم شده باشه (به‌خاطر معده).</li>
+        </ul>
+      </div>
+      <div class="card meal">
+        <h3>شب، فقط اگه گرسنه شدی <span class="kcal">حدود ۱۲۰ کالری · ۱۰ گرم پروتئین</span></h3>
+        <ul>
+          <li>۲۰۰ گرم ماست کم‌چرب یا ۱ لیوان شیر یا ۱۰۰ گرم پنیر کم‌چرب</li>
+          <li>چیپس و پفک نه؛ اگه هوس شور کردی، ۳۰ گرم آجیل بی‌نمک (وزن کن) یا خیار و نمک.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">قانون‌های ثابت</h3>
+        <ol>
+          <li>دو هفته‌ی اول پروتئین و برنج رو با ترازو وزن کن؛ بعدش چشمت یاد می‌گیره.</li>
+          <li>روغن: هر قاشق غذاخوری ۱۲۰ کالریه. سهم خودت رو با روغن کم بکش، روغن روی خورش رو نریز.</li>
+          <li>هر وعده حداقل ۳۰ گرم پروتئین. اگه یه وعده پروتئین نداشت، همون‌جا با ماست یونانی، تخم‌مرغ یا تن جبرانش کن.</li>
+          <li>فست‌فود هفته‌ای یک وعده (نه یک روز): کباب کوبیده یا جوجه با نصف برنج و بدون کره، یا ساندویچ مرغ گریل بدون سیب‌زمینی سرخ‌کرده. نوشیدنی زیرو. اون روز برنج بقیه‌ی وعده‌ها رو نصف کن.</li>
+          <li>شب‌های مهمانی: وعده رو با پروتئین شروع کن و برنج و نان اون روز رو نصف کن. شب قبل از جلسه‌ی یکشنبه سبک بخور و زود بخواب.</li>
+          <li>نوشیدنی‌های شیرین صفر؛ زیرو اشکالی نداره. آب روزی ۲٫۵ تا ۳ لیتر.</li>
+          <li>معده: آهسته بخور، سرخ‌کردنی کم، تا ۱٫۵ ساعت قبل تمرین وعده‌ی بزرگ نخور، بعد از شام دراز نکش. اگه درد یا ترش‌کردن ادامه‌دار داری، آزمایش هلیکوباکتر و ویزیت گوارش.</li>
+          <li>کراتین مونوهیدرات: روزی ۵ گرم با غذا (دو هفته‌ی اول ۳ گرم اگه معده حساسه). دوره‌ی بارگیری لازم نیست.</li>
+          <li>ویتامین D فقط اگه آزمایش کمبود نشون داد. پودر وی فقط اگه از غذا به ۱۶۰ گرم نمی‌رسی.</li>
+          <li>وزنه‌ی ترازو رو روزانه قضاوت نکن؛ میانگین هفتگی رو توی تب «بدن» نگاه کن.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">جدول جایگزینی</h3>
+        <p class="small" style="font-weight:700">هر کدوم حدود ۳۰ گرم پروتئین:</p>
+        <ul class="small">
+          <li>۱۲۰ گرم سینه‌ی مرغ پخته</li>
+          <li>۱۲۰ گرم گوشت قرمز کم‌چرب پخته</li>
+          <li>۱۵۰ گرم ماهی پخته</li>
+          <li>۱ قوطی تن ماهی (۱۲۰ گرم آبکش‌شده)</li>
+          <li>۲ تخم‌مرغ کامل + ۴ سفیده</li>
+          <li>۳۰۰ گرم ماست یونانی یا چکیده</li>
+          <li>۱ اسکوپ پروتئین وی</li>
+        </ul>
+        <p class="small" style="font-weight:700;margin-top:8px">هر کدوم جای ۱۵۰ گرم برنج پخته:</p>
+        <ul class="small">
+          <li>۱ سیب‌زمینی متوسط (۲۰۰ گرم)</li>
+          <li>۶۰ گرم نان سنگک</li>
+          <li>۲۰۰ گرم عدسی (پروتئین هم داره)</li>
+          <li>۵۰ گرم جو دوسر خام</li>
+          <li>۲ عدد میوه‌ی متوسط</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== پوسچر ===== -->
+    <section id="tab-posture" class="tab" hidden>
+      <h2>روتین ۱۰ دقیقه‌ای پوسچر</h2>
+      <p class="small muted">هر شب یا حداقل ۴ شب در هفته، روی فرش اتاق. هدف: لگنی که به جلو چرخیده، شونه‌های گرد و سرِ جلو. این‌ها شکم رو بزرگ‌تر و سینه رو افتاده‌تر نشون می‌دن.</p>
+      <div class="card">
+        <ol>
+          <li><b>کشش فلکسور ران (زانو زده):</b> یک زانو روی زمین، لگن رو زیر بکش و باسن همون طرف رو سفت کن، کمی به جلو. ۲ × ۴۵ ثانیه هر طرف.</li>
+          <li><b>ددباگ:</b> طاق‌باز، کمر چسبیده به زمین، دست و پای مخالف رو آهسته باز کن و بازدم بده. ۲ × ۸ هر طرف.</li>
+          <li><b>پل باسن:</b> بالا ۲ ثانیه باسن رو فشار بده، کمر قوس نگیره. ۲ × ۱۵.</li>
+          <li><b>کشش سینه در چهارچوب در:</b> آرنج ۹۰ درجه روی چهارچوب، یک قدم جلو. ۲ × ۳۰ ثانیه.</li>
+          <li><b>وال‌اسلاید (سرخوردن روی دیوار):</b> پشت و آرنج و مچ به دیوار، دست‌ها رو بالا و پایین ببر بدون اینکه از دیوار جدا شن. ۲ × ۱۰.</li>
+          <li><b>باز کردن قفسه‌ی سینه روی لبه‌ی صندلی یا فوم‌رولر:</b> دست‌ها پشت سر، بالای کمر رو روی لبه به عقب خم کن. ۱ دقیقه.</li>
+          <li><b>چین‌تاک (عقب کشیدن چونه):</b> چونه رو مستقیم عقب بکش تا پشت گردن بلند شه، ۳ ثانیه نگه دار. ۲ × ۱۰.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:6px">پشت سیستم</h3>
+        <ul>
+          <li>هر ۴۵ تا ۶۰ دقیقه ۲ دقیقه بلند شو؛ همون موقع ۱۰ چین‌تاک و کشش سینه.</li>
+          <li>مانیتور در ارتفاع چشم؛ اگه لپ‌تاپه، زیرش چیزی بذار و کیبورد جدا.</li>
+          <li>باسن تا ته صندلی، پاها روی زمین، صندلی کمی بالاتر که ران‌ها کمی رو به پایین باشن.</li>
+          <li>هفته‌ای یک بار شنا: کرال پشت بهترین حرکت برای شونه‌های گرده. ۲۰ تا ۳۰ دقیقه آروم.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:6px">توی باشگاه چی به این کمک می‌کنه</h3>
+        <ul class="small">
+          <li>فیس‌پول، پروانه‌ی معکوس و قایقی: عضله‌های بین کتف که شونه رو عقب نگه می‌دارن.</li>
+          <li>هیپ‌تراست، ددلیفت رومانیایی و اسکوات بلغاری: باسن و پشت ران که لگن رو صاف می‌کنن.</li>
+          <li>چرخ شکم، کرانچ سیم‌کش و ددباگ: شکمی که جلوی گودی کمر رو می‌گیره.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== قوانین ===== -->
+    <section id="tab-rules" class="tab" hidden>
+      <h2>قانون‌های اجرا</h2>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">فازهای ۱۶ هفته</h3>
+        <div class="phase-table">
+          <div class="phase-row"><b>هفته ۱ تا ۲</b><span>آشنایی: فقط ۲ ست از هر حرکت، وزنه ۶۰ تا ۷۰ درصد توان، ۳ تا ۴ تکرار ذخیره. درد عضلانی طبیعیه.</span></div>
+          <div class="phase-row"><b>هفته ۳ تا ۶</b><span>ساخت ۱: ست کامل، ۲ تکرار ذخیره. هر جلسه یا تکرار اضافه کن یا وزنه.</span></div>
+          <div class="phase-row"><b>هفته ۷</b><span>دیلود: نصف ست‌ها با همون وزنه‌ها. کاردیو و پوسچر ادامه داره.</span></div>
+          <div class="phase-row"><b>هفته ۸ تا ۱۱</b><span>ساخت ۲: یک ست اضافه روی حرکت‌های ستاره‌دار (سرشونه، بالاسینه، قایقی، هیپ‌تراست). ۱ تا ۲ تکرار ذخیره. اگه گرسنگی و خستگی زیاده، هفته‌ی ۸ رو با ۲۷۰۰ کالری بخور (استراحت رژیم).</span></div>
+          <div class="phase-row"><b>هفته ۱۲</b><span>دیلود + عکس + اندازه‌ها. برنامه بازبینی می‌شه.</span></div>
+          <div class="phase-row"><b>هفته ۱۳ تا ۱۶</b><span>ساخت ۳ تا رسیدن به ۸۰ کیلو. بعدش نگهداری ۴ هفته، بعد تصمیم برای حجم‌گیری آهسته.</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">قانون پیشرفت (پیشرفت دوگانه)</h3>
+        <ul>
+          <li>هر حرکت یه بازه‌ی تکرار داره، مثلاً ۶ تا ۸. با وزنه‌ای شروع کن که ته بازه رو با ۲ تا ۳ تکرار ذخیره بزنی.</li>
+          <li>هر جلسه سعی کن تکرارها رو بالا ببری. وقتی همه‌ی ست‌ها به سقف بازه رسید، وزنه رو زیاد کن و دوباره از ته بازه شروع کن. بالاتنه ۲٫۵ کیلو، پایین‌تنه ۵ کیلو، پرس پا ۱۰ کیلو، دمبل‌های ایزوله یک شماره.</li>
+          <li>اگه دو ست یا بیشتر زیر کف بازه بود، وزنه رو ۵ درصد کم کن. افت دو هفته‌ای در چند حرکت یعنی خواب یا کالری مشکل داره، نه برنامه.</li>
+          <li>صفحه همین قانون رو برات حساب می‌کنه: زیر هر حرکت «دفعه‌ی قبل» و توصیه‌ی امروز رو ببین.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">تکرار ذخیره یعنی چی</h3>
+        <p class="small">«۲ تکرار ذخیره» یعنی ست رو جایی تموم می‌کنی که هنوز می‌تونستی ۲ تکرار دیگه با فرم درست بزنی. سرعت حرکت کند شده ولی فرم خراب نشده. تا ناتوانی کامل فقط برای ست آخر حرکت‌های ایزوله (نشر جانب، پشت‌بازو، جلوبازو، ساق).</p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">گرم‌کردن و استراحت</h3>
+        <ul>
+          <li>۵ دقیقه دوچرخه یا تردمیل آروم. بعد: ۱۰ چرخش لگن، ۱۰ تاب پا هر طرف، ۱۵ کشش کش پشت شونه، ۸ گربه‌شتر.</li>
+          <li>حرکت اول هر جلسه: میله‌ی خالی × ۱۰، ۵۰ درصد × ۶، ۷۵ درصد × ۳، بعد ست‌های اصلی. حرکت دوم: یک ست سبک × ۶.</li>
+          <li>استراحت: حرکت‌های سنگین ۲ تا ۳ دقیقه، ایزوله ۶۰ تا ۹۰ ثانیه. کوتاه‌تر نکن؛ کیفیت ست بعدی می‌افته.</li>
+          <li>تمپو: پایین ۲ تا ۳ ثانیه کنترل‌شده، بالا با قدرت، دامنه‌ی کامل، بدون تاب.</li>
+          <li>هر جلسه ۶۰ تا ۷۵ دقیقه + ۱۰ تا ۱۵ دقیقه کاردیو. سیگار تا یک ساعت قبل از تمرین نه.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">تنظیم کالری بر اساس ترازو</h3>
+        <ul>
+          <li>هفته‌ی ۱ و ۲ ممکنه ۱ تا ۲ کیلو آب کم شه؛ حساب نیست.</li>
+          <li>از هفته‌ی ۳: هدف ۰٫۴ تا ۰٫۸ کیلو در هفته (میانگین ۷ روزه).</li>
+          <li>دو هفته‌ی پشت سر هم کمتر از ۰٫۳ کیلو: ۱۵۰ کالری کم کن (۵۰ گرم برنج از دو وعده) یا ۵ دقیقه به کاردیوی هر جلسه اضافه کن.</li>
+          <li>بیشتر از ۱ کیلو در هفته (بعد از هفته‌ی ۲): ۱۵۰ کالری اضافه کن؛ داری عضله هم از دست می‌دی.</li>
+          <li>دور کمر هر دو هفته باید کم شه، حتی اگه ترازو لج کرد. کمر کم شد و وزن نه؟ داری ریکامپ می‌کنی؛ چیزی عوض نکن.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">نقاط عطف واقع‌بینانه</h3>
+        <ul>
+          <li>هفته ۴: حدود ۸۶ کیلو، دور کمر ۲ تا ۳ سانت کمتر، وزنه‌ها نزدیک سابق.</li>
+          <li>هفته ۸: حدود ۸۴ کیلو، قدرت بالاتر از قبل از وقفه، شکم واضحاً کوچک‌تر.</li>
+          <li>هفته ۱۲: حدود ۸۲ کیلو، تغییر سینه دیده می‌شه، شونه‌ها پهن‌تر.</li>
+          <li>هفته ۱۶ تا ۲۰: ۸۰ کیلو، حدود ۱۵ درصد چربی. اینجا تصمیم بعدی رو می‌گیریم.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">وقتی این‌ها پیش اومد، تمرین رو قطع کن</h3>
+        <ul class="small">
+          <li>درد تیز یا سوزنی توی مفصل (شونه، زانو، کمر)، نه سوزش عضله.</li>
+          <li>سرگیجه یا حالت تهوع شدید (معمولاً غذای نزدیک به تمرین یا کم‌آبی).</li>
+          <li>درد کمر که بعد از ددلیفت یا اسکوات به پا می‌زنه. حرکت رو با نسخه‌ی دستگاهی عوض کن.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:6px">نبایدها</h3>
+        <ul class="small">
+          <li>روز چهارم تمرین اضافه نکن؛ سه روز + استخر کافیه.</li>
+          <li>با وزنه‌های ۷ ماه پیش شروع نکن.</li>
+          <li>هر ۲ هفته برنامه عوض نکن؛ ۱۲ هفته به همین بچسب.</li>
+          <li>پا رو حذف نکن، حتی وقتی حوصله نداری؛ نصف ست‌ها رو بزن ولی برو.</li>
+          <li>برای شکم صدها کرانچ نزن؛ چربی موضعی آب نمی‌شه. شکم با آشپزخونه کوچیک می‌شه.</li>
+          <li>آمپول و قرص هورمونی نه. پیشرفت طبیعی تو الان سریعه.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom" aria-label="بخش‌ها">
+    <button type="button" data-tab="train" aria-current="page">تمرین</button>
+    <button type="button" data-tab="body">بدن</button>
+    <button type="button" data-tab="food">تغذیه</button>
+    <button type="button" data-tab="posture">پوسچر</button>
+    <button type="button" data-tab="rules">قوانین</button>
+  </nav>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var START = { y: 2026, m: 10, d: 4 };   // یکشنبه ۱۲ مهر ۱۴۰۵، شروع هفته‌ی ۱
+  var HEIGHT_CM = 185, GOAL_KG = 80;
+
+  var nf = new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 1 });
+  var jal = new Intl.DateTimeFormat('fa-IR', { weekday: 'long', day: 'numeric', month: 'long' });
+  var jalShort = new Intl.DateTimeFormat('fa-IR', { day: 'numeric', month: 'long' });
+  function fa(n) { return (n === null || n === undefined || isNaN(n)) ? '—' : nf.format(n); }
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function todayStr() { var t = new Date(); return t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()); }
+  function parseDate(s) { var p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2], 12); }
+  function shiftDate(s, days) { var d = parseDate(s); d.setDate(d.getDate() + days); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function weekOf(s) { var p = s.split('-').map(Number); var days = Math.floor((Date.UTC(p[0], p[1] - 1, p[2]) - Date.UTC(START.y, START.m - 1, START.d)) / 86400000); return Math.floor(days / 7) + 1; }
+  function jalDate(s) { try { return jal.format(parseDate(s)); } catch (e) { return s; } }
+  function jalDateShort(s) { try { return jalShort.format(parseDate(s)); } catch (e) { return s; } }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function num(v) { if (v === '' || v === null || v === undefined) return null; var n = Number(v); return isNaN(n) ? null : n; }
+
+  /* ---------- برنامه ---------- */
+  var SESSIONS = {
+    A: { title: 'فول‌بادی', sub: 'یکشنبه · بعد از سه روز استراحت، سنگین‌ترین جلسه', cardio: 'بعد از وزنه: ۱۰ تا ۱۲ دقیقه پیاده‌روی روی تردمیل با شیب ۸ تا ۱۲ درصد و سرعت ۵ تا ۵٫۵',
+      ex: [
+        { id: 'squat', fa: 'اسکوات هالتر', en: 'Back Squat', sets: 3, lo: 6, hi: 8, rest: '۳ دقیقه', inc: 5,
+          cue: 'پاها به عرض شونه، پنجه کمی باز. نفس بگیر، شکم رو سفت کن، تا موازی زمین یا کمی پایین‌تر. زانو هم‌راستای پنجه، سینه بالا. اول جلسه: میله‌ی خالی ×۱۰، ۵۰٪ ×۶، ۷۵٪ ×۳.',
+          alt: 'اگه از فرم مطمئن نیستی یا کمر اذیت می‌شه: هاک‌اسکوات یا پرس پا ۳ × ۸ تا ۱۰، یا گابلت‌اسکوات با دمبل.' },
+        { id: 'bench', fa: 'پرس سینه هالتر', en: 'Barbell Bench Press', sets: 3, lo: 6, hi: 8, rest: '۲ تا ۳ دقیقه', inc: 2.5,
+          cue: 'کتف‌ها عقب و پایین، سینه بالا، پاها محکم روی زمین. میله تا پایین سینه، آرنج حدود ۴۵ درجه از بدن. پایین ۲ ثانیه، بالا با قدرت.',
+          alt: 'پرس سینه دمبل ۳ × ۸ تا ۱۰، یا دستگاه پرس سینه.' },
+        { id: 'pullup', fa: 'بارفیکس (یا لت سیم‌کش)', en: 'Pull-up / Lat Pulldown', sets: 3, lo: 6, hi: 10, rest: '۲ تا ۳ دقیقه', inc: 2.5,
+          cue: 'اگه ۶ بارفیکس تمیز نمی‌زنی، دستگاه بارفیکس کمکی یا لت سیم‌کش. سینه رو به میله بکش، آرنج‌ها رو به پایین و داخل، بدون تاب. بارفیکس بدون وزنه رو با وزنه‌ی ۰ ثبت کن.',
+          alt: 'دستگاه بارفیکس کمکی، یا لت سیم‌کش دست‌باز.' },
+        { id: 'legcurl', fa: 'پشت ران نشسته', en: 'Seated Leg Curl', sets: 3, lo: 10, hi: 12, rest: '۹۰ ثانیه', inc: 5,
+          cue: 'پایین آوردن آهسته (۳ ثانیه)، آخر حرکت کامل خم کن. باسن از صندلی بلند نشه.',
+          alt: 'پشت ران خوابیده.' },
+        { id: 'latraise', fa: 'نشر جانب دمبل', en: 'Dumbbell Lateral Raise', sets: 4, lo: 12, hi: 15, rest: '۶۰ ثانیه', inc: 1, priority: true,
+          cue: 'دمبل‌ها کمی جلوی بدن، آرنج کمی خم و بالاتر از مچ، تا ارتفاع شونه. تنه تاب نخوره. با ۶ تا ۱۰ کیلو هم عالی جواب می‌ده؛ سنگین نکن.',
+          alt: 'نشر جانب دستگاه.' },
+        { id: 'facepull', fa: 'فیس‌پول سیم‌کش', en: 'Cable Face Pull', sets: 3, lo: 15, hi: 20, rest: '۶۰ ثانیه', inc: 2.5,
+          cue: 'سیم در ارتفاع صورت. طناب رو به سمت پیشونی بکش و آخر حرکت شست‌ها رو به عقب بچرخون. کتف‌ها جمع، وزنه سبک.',
+          alt: 'کشش کش پشت شونه ۳ × ۲۰.' },
+        { id: 'cablecrunch', fa: 'کرانچ سیم‌کش', en: 'Cable Crunch', sets: 3, lo: 10, hi: 15, rest: '۶۰ ثانیه', inc: 2.5,
+          cue: 'زانو زده، طناب کنار سر. با خم کردن ستون فقرات (نه لگن) آرنج‌ها رو به سمت زانو ببر و بازدم کامل. بالا آهسته.',
+          alt: 'بالا آوردن زانو در حالت آویزان ۳ × ۱۰ تا ۱۵، یا ددباگ ۳ × ۱۰ هر طرف.' }
+      ] },
+    B: { title: 'بالاتنه', sub: 'سه‌شنبه · شونه و پشت در اولویت', cardio: 'بعد از وزنه: ۱۰ تا ۱۲ دقیقه دوچرخه یا تردمیل شیب‌دار',
+      ex: [
+        { id: 'ohp', fa: 'پرس سرشونه دمبل نشسته', en: 'Seated Dumbbell Shoulder Press', sets: 3, lo: 6, hi: 10, rest: '۲ تا ۳ دقیقه', inc: 2,
+          cue: 'پشتی ۸۰ درجه، کمر رو زیاد قوس نده، شکم سفت. دمبل‌ها بالا نزدیک هم، پایین تا سطح گوش. وزنه‌ی هر دمبل رو ثبت کن.',
+          alt: 'پرس سرشونه هالتر ایستاده، یا دستگاه پرس سرشونه.' },
+        { id: 'row', fa: 'قایقی با تکیه‌گاه سینه', en: 'Chest-Supported Row', sets: 3, lo: 8, hi: 12, rest: '۲ دقیقه', inc: 2.5, priority: true,
+          cue: 'سینه روی تکیه‌گاه. اول کتف‌ها رو جمع کن، بعد آرنج‌ها رو به سمت پهلو بکش. آخر حرکت ۱ ثانیه نگه دار. بدون تاب.',
+          alt: 'قایقی سیم‌کش نشسته، یا تی‌بار.' },
+        { id: 'incline', fa: 'پرس بالاسینه دمبل', en: 'Incline Dumbbell Press', sets: 3, lo: 8, hi: 12, rest: '۲ دقیقه', inc: 2, priority: true,
+          cue: 'شیب ۳۰ درجه، نه بیشتر. پایین آهسته تا کشش بالاسینه، دمبل‌ها بالا نزدیک هم. کتف عقب و پایین. این حرکت برای پر کردن بالای سینه‌ست.',
+          alt: 'پرس بالاسینه دستگاه یا اسمیت.' },
+        { id: 'pulldown', fa: 'لت سیم‌کش', en: 'Lat Pulldown', sets: 3, lo: 10, hi: 12, rest: '۲ دقیقه', inc: 2.5,
+          cue: 'دستگیره‌ی دست‌باز یا خنثی. میله تا بالای سینه، آرنج‌ها به سمت پهلو. بالای حرکت بذار کتف‌ها کامل باز شن.',
+          alt: 'لت تک‌دست سیم‌کش.' },
+        { id: 'cablelat', fa: 'نشر جانب سیم‌کش', en: 'Cable Lateral Raise', sets: 3, lo: 12, hi: 20, rest: '۶۰ ثانیه', inc: 1, priority: true,
+          cue: 'سیم از پایین و از پشت بدن. آهسته تا ارتفاع شونه، آهسته پایین. ست آخر تا ناتوانی.',
+          alt: 'نشر جانب دمبل یا دستگاه.' },
+        { id: 'reversefly', fa: 'پروانه‌ی معکوس (پشت شونه)', en: 'Reverse Pec Deck', sets: 3, lo: 12, hi: 20, rest: '۶۰ ثانیه', inc: 2.5,
+          cue: 'دست‌ها کمی خم، حرکت از شونه نه گردن. آخر حرکت ۱ ثانیه مکث. وزنه سبک.',
+          alt: 'پشت شونه دمبل خم‌شده.' },
+        { id: 'pushdown', fa: 'پشت‌بازو طناب', en: 'Rope Triceps Pushdown', sets: 2, lo: 10, hi: 15, rest: '۶۰ ثانیه · سوپرست با جلوبازو', inc: 2.5,
+          cue: 'آرنج‌ها چسبیده به پهلو، پایین طناب رو باز کن. بالا آهسته. بلافاصله بعدش جلوبازو.',
+          alt: 'دیپ روی دستگاه.' },
+        { id: 'curl', fa: 'جلوبازو دمبل روی میز شیب‌دار', en: 'Incline Dumbbell Curl', sets: 2, lo: 10, hi: 15, rest: '۶۰ ثانیه', inc: 1,
+          cue: 'میز ۶۰ درجه، دست‌ها آویزان و کشیده. آرنج ثابت، بالا کف دست رو به بالا بچرخون. پایین کامل.',
+          alt: 'جلوبازو هالتر ایستاده.' }
+      ] },
+    C: { title: 'پایین‌تنه + میان‌تنه', sub: 'چهارشنبه · باسن، پشت ران و شکم', cardio: 'بعد از وزنه: ۱۲ تا ۱۵ دقیقه دوچرخه یا تردمیل شیب‌دار',
+      ex: [
+        { id: 'rdl', fa: 'ددلیفت رومانیایی', en: 'Romanian Deadlift', sets: 3, lo: 6, hi: 10, rest: '۳ دقیقه', inc: 5,
+          cue: 'میله چسبیده به ران و ساق، زانو کمی خم و ثابت. باسن رو عقب بده، کمر صاف، تا زیر زانو یا وسط ساق (تا جایی که پشت ران کشیده شه). با فشار باسن بالا بیا، بالا قوس نده.',
+          alt: 'ددلیفت رومانیایی با دمبل.' },
+        { id: 'legpress', fa: 'پرس پا (پاها بالا و باز)', en: 'Leg Press', sets: 3, lo: 10, hi: 12, rest: '۲ دقیقه', inc: 10,
+          cue: 'پاها بالای صفحه و کمی بازتر از شونه، برای تأکید روی باسن و پشت ران. کمر و باسن چسبیده به صندلی، زانو تا ۹۰ درجه یا کمی بیشتر. زانو رو قفل نکن.',
+          alt: 'هاک‌اسکوات.' },
+        { id: 'hipthrust', fa: 'هیپ‌تراست هالتر', en: 'Barbell Hip Thrust', sets: 3, lo: 8, hi: 12, rest: '۲ دقیقه', inc: 5, priority: true,
+          cue: 'پشت روی لبه‌ی نیمکت، میله با پد روی لگن. چونه پایین، دنده‌ها پایین. بالا بیا تا تنه موازی زمین و زانو ۹۰ درجه؛ بالا ۱ تا ۲ ثانیه باسن رو فشار بده.',
+          alt: 'دستگاه هیپ‌تراست، یا پل باسن با وزنه.' },
+        { id: 'bss', fa: 'اسکوات بلغاری', en: 'Bulgarian Split Squat', sets: 2, lo: 10, hi: 12, rest: '۹۰ ثانیه', inc: 2, perLeg: true,
+          cue: 'پای عقب روی نیمکت، تنه کمی خم به جلو (باسن بیشتر درگیر می‌شه). زانوی جلو ثابت، فشار روی پاشنه. تکرار هر پا رو ثبت کن.',
+          alt: 'لانج راه‌رونده با دمبل ۲ × ۱۰ هر پا.' },
+        { id: 'calf', fa: 'ساق پا ایستاده', en: 'Standing Calf Raise', sets: 3, lo: 10, hi: 15, rest: '۶۰ ثانیه', inc: 5,
+          cue: 'پایین کشش کامل و ۲ ثانیه مکث، بالا ۱ ثانیه مکث. زانو صاف.',
+          alt: 'ساق پا روی دستگاه پرس پا.' },
+        { id: 'abwheel', fa: 'چرخ شکم (یا پلانک)', en: 'Ab Wheel / Plank', sets: 3, lo: 8, hi: 12, rest: '۶۰ ثانیه', inc: 0,
+          cue: 'از زانو. باسن سفت و لگن کمی به عقب چرخیده تا کمر گود نشه. تا جایی برو که کمر رو کنترل داری. اگه چرخ نیست: پلانک ۳ × ۴۰ تا ۶۰ ثانیه و ثانیه رو توی خونه‌ی تکرار بنویس.',
+          alt: 'ددباگ ۳ × ۱۰ هر طرف.' },
+        { id: 'latraise', fa: 'نشر جانب دمبل', en: 'Dumbbell Lateral Raise', sets: 3, lo: 12, hi: 15, rest: '۶۰ ثانیه', inc: 1, priority: true,
+          cue: 'دوز سوم سرشونه در هفته. همون فرم یکشنبه؛ ست آخر تا ناتوانی.',
+          alt: 'نشر جانب دستگاه.' }
+      ] }
+  };
+
+  function phaseOf(w) {
+    if (w < 1) return { name: 'آماده‌سازی و تست', mul: 'intro', rir: '۳ تا ۴', note: 'جلسه‌ی تست: برای هر حرکت وزنه‌ای پیدا کن که ۸ تکرار تمیز با ۳ تکرار ذخیره بزنی. همون رو ثبت کن.' };
+    if (w <= 2) return { name: 'آشنایی', mul: 'intro', rir: '۳ تا ۴', note: 'فقط ۲ ست از هر حرکت، با ۶۰ تا ۷۰ درصد توانت. فرم رو بساز؛ درد عضلانی این دو هفته طبیعیه.' };
+    if (w <= 6) return { name: 'ساخت ۱', mul: 1, rir: '۲ (ست آخر ایزوله‌ها: ۰ تا ۱)', note: 'ست کامل. هر جلسه یا تکرار اضافه کن یا وزنه.' };
+    if (w === 7) return { name: 'دیلود', mul: 0.5, rir: '۴ یا بیشتر', note: 'نصف ست‌ها با همون وزنه‌ها. هفته‌ی ریکاوری؛ سبک و تمیز.' };
+    if (w <= 11) return { name: 'ساخت ۲', mul: 1, extra: true, rir: '۱ تا ۲', note: 'یک ست اضافه روی حرکت‌های ستاره‌دار.' };
+    if (w === 12) return { name: 'دیلود، تست و عکس', mul: 0.5, rir: '۴ یا بیشتر', note: 'نصف ست‌ها. این هفته عکس و اندازه‌ها رو بگیر و برای بازبینی بفرست.' };
+    if (w <= 16) return { name: 'ساخت ۳', mul: 1, extra: true, rir: '۱ تا ۲', note: 'ادامه تا ۸۰ کیلو. اگه وزنه‌ها دو هفته ثابت موندن، خواب و کالری رو چک کن.' };
+    return { name: 'بعد از هفته‌ی ۱۶', mul: 1, extra: true, rir: '۱ تا ۲', note: 'وقت بازبینی برنامه‌ست: نگهداری یا حجم‌گیری آهسته.' };
+  }
+  function setsFor(ex, ph) {
+    var n = ph.mul === 'intro' ? Math.min(2, ex.sets) : Math.max(1, Math.round(ex.sets * ph.mul));
+    if (ph.extra && ex.priority) n += 1;
+    return n;
+  }
+  function defaultSession(dateStr) {
+    var d = parseDate(dateStr).getDay();
+    if (d === 3) return 'C';
+    if (d === 1 || d === 2) return 'B';
+    return 'A';
+  }
+
+  /* ---------- ذخیره‌سازی (روی همین دستگاه) ---------- */
+  var store = { logs: new Map(), body: new Map(), ok: true };
+  var state = { dateStr: todayStr(), session: 'A', lastEdit: 0 };
+
+  var el = {};
+  ['todayLine', 'logDate', 'weekLine', 'phaseNote', 'sessionChips', 'sessionHead', 'exList', 'cardioDone', 'note', 'saveStatus', 'history',
+   'bodyDate', 'bw', 'waist', 'neck', 'saveBody', 'bodyStatus', 'bodyTiles', 'verdict', 'chartWrap', 'bodyRows',
+   'storageLine', 'exportBtn', 'importBtn', 'importFile', 'backupStatus'].forEach(function (id) { el[id] = document.getElementById(id); });
+
+  function setStatus(t) { el.saveStatus.textContent = t; }
+  function lsGet(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function loadLocal() {
+    var L = lsGet('recomp.logs'); if (Array.isArray(L)) L.forEach(function (p) { if (p && p[0] && p[1]) store.logs.set(p[0], p[1]); });
+    var B = lsGet('recomp.body'); if (Array.isArray(B)) B.forEach(function (p) { if (p && p[0] && p[1]) store.body.set(p[0], p[1]); });
+  }
+  function saveLocal() {
+    var a = lsSet('recomp.logs', Array.from(store.logs.entries()));
+    var b = lsSet('recomp.body', Array.from(store.body.entries()));
+    store.ok = a && b;
+    return store.ok;
+  }
+  function persistLog(id, doc) {
+    store.logs.set(id, doc);
+    setStatus(saveLocal() ? 'ذخیره شد ✓' : 'ذخیره نشد؛ این مرورگر اجازه‌ی ذخیره نمی‌ده. فایل رو داخل کروم باز کن.');
+    renderHistory();
+  }
+  function persistBody(date, doc) {
+    store.body.set(date, doc);
+    el.bodyStatus.textContent = saveLocal() ? 'ثبت شد ✓' : 'ثبت نشد؛ این مرورگر اجازه‌ی ذخیره نمی‌ده.';
+  }
+  function deleteBody(date) {
+    store.body.delete(date);
+    el.bodyStatus.textContent = saveLocal() ? 'حذف شد' : 'حذف نشد';
+    renderBody();
+  }
+  function initStore() {
+    loadLocal();
+    var test = lsSet('recomp.test', 1);
+    try { localStorage.removeItem('recomp.test'); } catch (e) {}
+    if (!test) {
+      el.storageLine.textContent = 'این مرورگر اجازه‌ی ذخیره‌سازی نمی‌ده (معمولاً وقتی فایل از داخل تلگرام یا فایل‌منیجر باز شده). فایل رو توی حافظه‌ی گوشی کپی کن و با کروم بازش کن، یا نسخه‌ی نصبی (آدرس اینترنتی) رو استفاده کن.';
+      setStatus('ذخیره‌سازی در این حالت کار نمی‌کنه.');
+    }
+  }
+
+  /* ---------- پشتیبان ---------- */
+  function exportData() {
+    var payload = { app: 'recomp', version: 1, exportedAt: new Date().toISOString(), logs: Array.from(store.logs.entries()), body: Array.from(store.body.entries()) };
+    var json = JSON.stringify(payload, null, 1);
+    var name = 'recomp-backup-' + todayStr() + '.json';
+    // داخل اپ اندروید: به‌جای دانلود، پنجره‌ی اشتراک‌گذاری باز می‌شه (تلگرام، درایو، ...)
+    if (window.AndroidBridge && typeof window.AndroidBridge.shareText === 'function') {
+      window.AndroidBridge.shareText(name, json);
+      el.backupStatus.textContent = 'فایل پشتیبان آماده‌ست (' + fa(store.logs.size) + ' جلسه و ' + fa(store.body.size) + ' ثبت وزن)؛ توی تلگرام برای خودت بفرست.';
+      return;
+    }
+    var blob = new Blob([json], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    el.backupStatus.textContent = 'فایل پشتیبان ساخته شد: ' + fa(store.logs.size) + ' جلسه و ' + fa(store.body.size) + ' ثبت وزن.';
+  }
+  function importData(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var p = JSON.parse(reader.result);
+        if (!p || p.app !== 'recomp' || !Array.isArray(p.logs) || !Array.isArray(p.body)) throw new Error('bad');
+        var nl = 0, nb = 0;
+        p.logs.forEach(function (e) {
+          if (!e || !e[0] || !e[1]) return;
+          var cur = store.logs.get(e[0]);
+          if (!cur || String(e[1].updatedAt || '') > String(cur.updatedAt || '')) { store.logs.set(e[0], e[1]); nl++; }
+        });
+        p.body.forEach(function (e) {
+          if (!e || !e[0] || !e[1]) return;
+          var cur = store.body.get(e[0]);
+          if (!cur || String(e[1].updatedAt || '') > String(cur.updatedAt || '')) { store.body.set(e[0], e[1]); nb++; }
+        });
+        saveLocal(); renderSession(); renderHistory(); renderBody();
+        el.backupStatus.textContent = 'بازیابی شد: ' + fa(nl) + ' جلسه و ' + fa(nb) + ' ثبت وزن اضافه یا به‌روز شد.';
+      } catch (e) {
+        el.backupStatus.textContent = 'این فایل پشتیبان معتبر نیست.';
+      }
+    };
+    reader.readAsText(file);
+  }
+  el.exportBtn.addEventListener('click', exportData);
+  el.importBtn.addEventListener('click', function () { el.importFile.value = ''; el.importFile.click(); });
+  el.importFile.addEventListener('change', function () { if (el.importFile.files && el.importFile.files[0]) importData(el.importFile.files[0]); });
+
+  /* ---------- تمرین ---------- */
+  function lastFor(exId, dateStr, excludeId) {
+    var arr = Array.from(store.logs.values()).filter(function (d) {
+      if (!d || !d.date) return false;
+      var id = d.date + '_' + d.session;
+      return id !== excludeId && d.date <= dateStr;
+    }).sort(function (a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
+    for (var i = 0; i < arr.length; i++) {
+      var s = arr[i].sets && arr[i].sets[exId];
+      if (s && s.some(function (x) { return x && (x.w !== null && x.w !== undefined || x.r !== null && x.r !== undefined); })) {
+        return { date: arr[i].date, sets: s.filter(function (x) { return x && (x.w !== null && x.w !== undefined || x.r !== null && x.r !== undefined); }) };
+      }
+    }
+    return null;
+  }
+  function hintFor(ex, last) {
+    if (!last) return { cls: '', text: 'اولین بار: وزنه‌ای انتخاب کن که ته بازه‌ی تکرار رو با ۲ تا ۳ تکرار ذخیره بزنی.' };
+    var reps = last.sets.map(function (s) { return Number(s.r); }).filter(function (r) { return !isNaN(r) && r > 0; });
+    if (!reps.length) return { cls: '', text: '' };
+    var allTop = reps.every(function (r) { return r >= ex.hi; });
+    var below = reps.filter(function (r) { return r < ex.lo; }).length;
+    if (allTop) {
+      if (ex.inc > 0) return { cls: 'good', text: 'همه‌ی ست‌های دفعه‌ی قبل به سقف رسید؛ امروز وزنه رو حدود ' + fa(ex.inc) + ' کیلو زیاد کن' + (ex.inc <= 1 ? ' (یه دمبل سنگین‌تر)' : '') + '.' };
+      return { cls: 'good', text: 'همه‌ی ست‌ها به سقف رسید؛ حرکت رو سخت‌تر کن (دامنه‌ی بیشتر یا مکث).' };
+    }
+    if (below >= 2) return { cls: 'warn', text: 'دو ست یا بیشتر زیر کف تکرار بود؛ همین وزنه یا ۵ درصد سبک‌تر، تمرکز روی فرم.' };
+    return { cls: '', text: 'همین وزنه؛ سعی کن تکرارها رو یکی بیشتر کنی.' };
+  }
+  function fmtSet(s) { return fa(s.w === null || s.w === undefined ? NaN : s.w) + '×' + fa(s.r === null || s.r === undefined ? NaN : s.r); }
+
+  function renderSession() {
+    var dateStr = state.dateStr, w = weekOf(dateStr), ph = phaseOf(w), S = SESSIONS[state.session];
+    var id = dateStr + '_' + state.session, doc = store.logs.get(id);
+    el.weekLine.innerHTML = '<span class="pill">' + (w >= 1 ? 'هفته‌ی ' + fa(w) : 'قبل از شروع') + '</span><span>' + esc(ph.name) + '</span><span class="muted">· تکرار ذخیره: ' + esc(ph.rir) + '</span>';
+    el.phaseNote.textContent = ph.note;
+    Array.prototype.forEach.call(el.sessionChips.querySelectorAll('.chip'), function (c) { c.setAttribute('aria-pressed', c.dataset.s === state.session ? 'true' : 'false'); });
+    el.sessionHead.innerHTML = '<h2>' + esc(S.title) + '</h2><p class="muted small">' + esc(S.sub) + '</p><div class="cardio">' + esc(S.cardio) + '</div>';
+
+    el.exList.innerHTML = S.ex.map(function (ex) {
+      var n = setsFor(ex, ph);
+      var logged = doc && doc.sets && doc.sets[ex.id] ? doc.sets[ex.id] : [];
+      if (logged.length > n) n = logged.length;
+      var last = lastFor(ex.id, dateStr, id), hint = hintFor(ex, last);
+      var rows = '';
+      for (var i = 0; i < n; i++) {
+        var L = logged[i] || {};
+        var preW = (L.w !== undefined && L.w !== null) ? L.w : (last && last.sets.length ? (last.sets[i] || last.sets[last.sets.length - 1]).w : null);
+        var preR = (L.r !== undefined && L.r !== null) ? L.r : null;
+        rows += '<div class="set-row"><span class="set-n">' + fa(i + 1) + '</span>' +
+          '<input class="w" type="number" inputmode="decimal" step="0.5" min="0" max="500" id="' + ex.id + '_w' + i + '" placeholder="کیلو" value="' + (preW === null || preW === undefined ? '' : preW) + '">' +
+          '<input class="r" type="number" inputmode="numeric" step="1" min="0" max="200" id="' + ex.id + '_r' + i + '" placeholder="تکرار" value="' + (preR === null ? '' : preR) + '"></div>';
+      }
+      return '<article class="card ex" data-ex="' + ex.id + '">' +
+        '<header><div class="ex-name"><span class="fa">' + (ex.priority ? '<span class="star" title="اولویت">★</span> ' : '') + esc(ex.fa) + '</span><span class="en">' + esc(ex.en) + '</span></div>' +
+        '<div class="ex-target">' + fa(n) + ' × ' + fa(ex.lo) + ' تا ' + fa(ex.hi) + (ex.perLeg ? ' هر پا' : '') + '<br>استراحت ' + esc(ex.rest) + '</div></header>' +
+        '<p class="cue">' + esc(ex.cue) + '</p>' +
+        (last ? '<div class="last">دفعه‌ی قبل (' + esc(jalDateShort(last.date)) + '): ' + last.sets.map(fmtSet).join(' · ') + '</div>' : '') +
+        (hint.text ? '<div class="hint ' + hint.cls + '">' + esc(hint.text) + '</div>' : '') +
+        '<div class="sets"><div class="set-head"><span></span><span>وزنه (کیلو)</span><span>تکرار</span></div>' + rows + '</div>' +
+        '<details class="alt"><summary>جایگزین</summary><p>' + esc(ex.alt) + '</p></details>' +
+        '</article>';
+    }).join('');
+    el.cardioDone.checked = !!(doc && doc.cardio);
+    el.note.value = doc && doc.note ? doc.note : '';
+  }
+
+  function buildDoc() {
+    var sets = {};
+    Array.prototype.forEach.call(el.exList.querySelectorAll('.ex'), function (art) {
+      var rows = Array.prototype.map.call(art.querySelectorAll('.set-row'), function (r) {
+        return { w: num(r.querySelector('.w').value), r: num(r.querySelector('.r').value) };
+      });
+      if (rows.some(function (x) { return x.w !== null || x.r !== null; })) sets[art.dataset.ex] = rows;
+    });
+    return { date: state.dateStr, session: state.session, week: weekOf(state.dateStr), sets: sets, cardio: el.cardioDone.checked, note: el.note.value.trim(), updatedAt: new Date().toISOString() };
+  }
+  var saveTimer = null;
+  function scheduleSave() { state.lastEdit = Date.now(); setStatus('در حال ذخیره…'); clearTimeout(saveTimer); saveTimer = setTimeout(flushSave, 700); }
+  function flushSave() {
+    clearTimeout(saveTimer); saveTimer = null;
+    var doc = buildDoc(), id = doc.date + '_' + doc.session;
+    var has = Object.keys(doc.sets).length || doc.cardio || doc.note;
+    if (!has && !store.logs.has(id)) { setStatus(''); return; }
+    var prev = store.logs.get(id);
+    if (prev && JSON.stringify({ s: prev.sets, c: prev.cardio, n: prev.note }) === JSON.stringify({ s: doc.sets, c: doc.cardio, n: doc.note })) { setStatus('ذخیره شد ✓'); return; }
+    persistLog(id, doc);
+  }
+  function renderHistory() {
+    var arr = Array.from(store.logs.values()).filter(function (d) { return d && d.date; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 15);
+    if (!arr.length) { el.history.innerHTML = '<div class="empty">هنوز جلسه‌ای ثبت نشده. اولین جلسه رو همین بالا ثبت کن.</div>'; return; }
+    el.history.innerHTML = arr.map(function (d) {
+      var S = SESSIONS[d.session] || { title: d.session, ex: [] };
+      var n = 0; Object.keys(d.sets || {}).forEach(function (k) { n += (d.sets[k] || []).filter(function (x) { return x && x.r; }).length; });
+      var first = S.ex.length && d.sets && d.sets[S.ex[0].id] ? S.ex[0].fa + ' ' + d.sets[S.ex[0].id].filter(function (x) { return x && (x.w !== null || x.r !== null); }).map(fmtSet).join(' · ') : '';
+      return '<button type="button" data-date="' + d.date + '" data-s="' + d.session + '"><b>' + esc(jalDate(d.date)) + '</b> · ' + esc(S.title) + ' · ' + fa(n) + ' ست' + (d.cardio ? ' · کاردیو ✓' : '') + (first ? '<br><span class="muted">' + esc(first) + '</span>' : '') + '</button>';
+    }).join('');
+  }
+
+  el.exList.addEventListener('input', scheduleSave);
+  el.cardioDone.addEventListener('change', scheduleSave);
+  el.note.addEventListener('input', scheduleSave);
+  el.logDate.addEventListener('change', function () {
+    if (saveTimer) flushSave();
+    var v = el.logDate.value; if (!v) return;
+    state.dateStr = v; state.session = defaultSession(v); renderSession();
+  });
+  el.sessionChips.addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    if (saveTimer) flushSave();
+    state.session = b.dataset.s; renderSession();
+  });
+  el.history.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-date]'); if (!b) return;
+    if (saveTimer) flushSave();
+    state.dateStr = b.dataset.date; state.session = b.dataset.s; el.logDate.value = state.dateStr; renderSession();
+    window.scrollTo({ top: 0 });
+  });
+  window.addEventListener('pagehide', function () { if (saveTimer) flushSave(); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && saveTimer) flushSave(); });
+
+  /* ---------- بدن ---------- */
+  function navyBF(waist, neck) {
+    if (!(waist > neck)) return null;
+    var v = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(HEIGHT_CM)) - 450;
+    return (v > 2 && v < 60) ? v : null;
+  }
+  function saveBody() {
+    var date = el.bodyDate.value || todayStr();
+    var w = num(el.bw.value), wa = num(el.waist.value), ne = num(el.neck.value);
+    if (w === null && wa === null && ne === null) { el.bodyStatus.textContent = 'حداقل یکی از عددها رو وارد کن.'; return; }
+    var prev = store.body.get(date) || {};
+    var doc = { date: date, weight: w !== null ? w : (prev.weight !== undefined ? prev.weight : null), waist: wa !== null ? wa : (prev.waist !== undefined ? prev.waist : null), neck: ne !== null ? ne : (prev.neck !== undefined ? prev.neck : null), updatedAt: new Date().toISOString() };
+    persistBody(date, doc);
+    el.bw.value = ''; el.waist.value = ''; el.neck.value = '';
+    renderBody();
+  }
+  el.saveBody.addEventListener('click', saveBody);
+  el.bodyRows.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-del]'); if (!b) return;
+    if (b.dataset.armed === '1') { deleteBody(b.dataset.del); return; }
+    b.dataset.armed = '1'; b.textContent = 'مطمئنی؟';
+    setTimeout(function () { if (b.isConnected) { b.dataset.armed = ''; b.textContent = 'حذف'; } }, 3000);
+  });
+
+  function renderBody() {
+    var rows = Array.from(store.body.values()).filter(function (d) { return d && d.date; }).sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    var wRows = rows.filter(function (d) { return typeof d.weight === 'number'; });
+    var today = todayStr();
+    var last = wRows.length ? wRows[wRows.length - 1] : null;
+    function within(from, to) { return wRows.filter(function (d) { return d.date > from && d.date <= to; }); }
+    function avg(a) { return a.reduce(function (s, d) { return s + d.weight; }, 0) / a.length; }
+    var A = within(shiftDate(today, -7), today), B = within(shiftDate(today, -14), shiftDate(today, -7));
+    var avgA = A.length ? avg(A) : null, avgB = B.length ? avg(B) : null;
+    var delta = (avgA !== null && avgB !== null) ? avgA - avgB : null;
+    var bfRow = null; for (var i = rows.length - 1; i >= 0; i--) { if (typeof rows[i].waist === 'number' && typeof rows[i].neck === 'number') { bfRow = rows[i]; break; } }
+    var bf = bfRow ? navyBF(bfRow.waist, bfRow.neck) : null;
+    var lastWaist = null; for (var j = rows.length - 1; j >= 0; j--) { if (typeof rows[j].waist === 'number') { lastWaist = rows[j]; break; } }
+
+    el.bodyTiles.innerHTML =
+      '<div class="tile"><div class="v">' + (avgA !== null ? fa(Math.round(avgA * 10) / 10) : '—') + '</div><div class="k">میانگین ۷ روز اخیر (کیلو)</div></div>' +
+      '<div class="tile"><div class="v">' + (delta !== null ? ((delta > 0 ? '+' : '') + fa(Math.round(delta * 100) / 100)) : '—') + '</div><div class="k">تغییر نسبت به هفته‌ی قبل</div></div>' +
+      '<div class="tile"><div class="v">' + (last ? fa(Math.round((last.weight - GOAL_KG) * 10) / 10) : '—') + '</div><div class="k">فاصله تا ۸۰ کیلو</div></div>' +
+      '<div class="tile"><div class="v">' + (bf !== null ? fa(Math.round(bf * 10) / 10) + '٪' : '—') + '</div><div class="k">تخمین چربی (کمر ' + (lastWaist ? fa(lastWaist.waist) + ' سانت' : '—') + ')</div></div>';
+
+    var v = el.verdict;
+    if (delta === null || A.length < 3 || B.length < 3) { v.className = 'verdict'; v.textContent = 'برای قضاوت، هر هفته حداقل ۳ بار وزن رو ثبت کن؛ بعد اینجا می‌گم کالری رو دست بزنی یا نه.'; }
+    else if (delta <= -0.3 && delta >= -0.9) { v.className = 'verdict good'; v.textContent = 'سرعت درسته (' + fa(Math.abs(Math.round(delta * 100) / 100)) + ' کیلو در هفته). هیچی رو عوض نکن.'; }
+    else if (delta > -0.3 && delta <= 0.15) { v.className = 'verdict warn'; v.textContent = 'کند شده. اگه هفته‌ی بعد هم همین بود، ۱۵۰ کالری کم کن (۵۰ گرم برنج از دو وعده) یا ۵ دقیقه به کاردیوی هر جلسه اضافه کن. دور کمر رو هم چک کن؛ اگه کمر کم شده، صبر کن.'; }
+    else if (delta > 0.15) { v.className = 'verdict bad'; v.textContent = 'وزن بالا رفته. سه چیز رو بررسی کن: روغن غذا، وعده‌ی شبانه، شب فست‌فود و مهمانی. دو هفته‌ی اول اگه کراتین شروع کردی، ۱ کیلو آبِ کراتینه و طبیعیه.'; }
+    else { v.className = 'verdict warn'; v.textContent = 'خیلی سریع (بیشتر از ۰٫۹ کیلو در هفته). بعد از هفته‌ی ۲، ۱۵۰ کالری اضافه کن تا عضله از دست نره.'; }
+
+    renderChart(wRows);
+
+    if (!rows.length) { el.bodyRows.innerHTML = '<div class="empty">هنوز چیزی ثبت نشده. وزن امروز رو بنویس و «ثبت» بزن.</div>'; return; }
+    el.bodyRows.innerHTML = '<div class="bodyrow muted"><span>تاریخ</span><span>وزن</span><span>کمر</span><span>گردن</span><span></span></div>' +
+      rows.slice().reverse().slice(0, 30).map(function (d) {
+        return '<div class="bodyrow"><span>' + esc(jalDateShort(d.date)) + '</span><span>' + (typeof d.weight === 'number' ? fa(d.weight) : '—') + '</span><span>' + (typeof d.waist === 'number' ? fa(d.waist) : '—') + '</span><span>' + (typeof d.neck === 'number' ? fa(d.neck) : '—') + '</span><button type="button" class="btn small danger" data-del="' + d.date + '">حذف</button></div>';
+      }).join('');
+  }
+
+  function renderChart(wRows) {
+    if (wRows.length < 2) { el.chartWrap.innerHTML = '<div class="empty">بعد از دو ثبت، نمودار اینجا ظاهر می‌شه.</div>'; return; }
+    var W = 600, H = 240, padL = 34, padR = 12, padT = 12, padB = 26;
+    var t0 = parseDate(wRows[0].date).getTime(), t1 = parseDate(wRows[wRows.length - 1].date).getTime();
+    if (t1 === t0) t1 = t0 + 86400000;
+    var ws = wRows.map(function (d) { return d.weight; });
+    var minW = Math.min.apply(null, ws.concat([GOAL_KG])) - 1, maxW = Math.max.apply(null, ws) + 1;
+    function X(t) { return padL + (t - t0) / (t1 - t0) * (W - padL - padR); }
+    function Y(w) { return padT + (maxW - w) / (maxW - minW) * (H - padT - padB); }
+    var pts = wRows.map(function (d) { return { x: X(parseDate(d.date).getTime()), y: Y(d.weight), t: parseDate(d.date).getTime(), w: d.weight }; });
+    var avgPts = pts.map(function (p) {
+      var win = pts.filter(function (q) { return q.t <= p.t && q.t > p.t - 7 * 86400000; });
+      var m = win.reduce(function (s, q) { return s + q.w; }, 0) / win.length;
+      return { x: p.x, y: Y(m) };
+    });
+    var grid = '', k, steps = 4;
+    for (k = 0; k <= steps; k++) {
+      var wv = minW + (maxW - minW) * k / steps, yy = Y(wv);
+      grid += '<line class="grid" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yy.toFixed(1) + '" y2="' + yy.toFixed(1) + '"></line>' +
+        '<text x="' + (padL - 4) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + fa(Math.round(wv * 10) / 10) + '</text>';
+    }
+    var goalY = Y(GOAL_KG);
+    var lastP = pts[pts.length - 1];
+    el.chartWrap.innerHTML = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="نمودار وزن" style="direction:ltr">' + grid +
+      '<line class="goal" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + goalY.toFixed(1) + '" y2="' + goalY.toFixed(1) + '"></line>' +
+      '<polyline class="daily" points="' + pts.map(function (p) { return p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' ') + '"></polyline>' +
+      '<polyline class="avg" points="' + avgPts.map(function (p) { return p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' ') + '"></polyline>' +
+      '<circle class="dot" cx="' + lastP.x.toFixed(1) + '" cy="' + lastP.y.toFixed(1) + '" r="4"></circle>' +
+      '<text x="' + padL + '" y="' + (H - 8) + '" text-anchor="start">' + esc(jalDateShort(wRows[0].date)) + '</text>' +
+      '<text x="' + (W - padR) + '" y="' + (H - 8) + '" text-anchor="end">' + esc(jalDateShort(wRows[wRows.length - 1].date)) + '</text>' +
+      '</svg>';
+  }
+
+  /* ---------- تب‌ها ---------- */
+  var TABS = ['train', 'body', 'food', 'posture', 'rules'];
+  function showTab(name) {
+    if (TABS.indexOf(name) < 0) name = 'train';
+    TABS.forEach(function (t) { document.getElementById('tab-' + t).hidden = (t !== name); });
+    Array.prototype.forEach.call(document.querySelectorAll('.bottom button'), function (b) {
+      if (b.dataset.tab === name) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    lsSet('recomp.tab', name);
+    window.scrollTo({ top: 0 });
+  }
+  document.querySelector('.bottom').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-tab]'); if (!b) return;
+    if (saveTimer) flushSave();
+    showTab(b.dataset.tab);
+  });
+
+  /* ---------- شروع ---------- */
+  var today = todayStr();
+  el.logDate.value = today; el.bodyDate.value = today;
+  state.dateStr = today; state.session = defaultSession(today);
+  var wk = weekOf(today);
+  el.todayLine.textContent = jalDate(today) + ' · ' + (wk >= 1 ? 'هفته‌ی ' + fa(wk) : 'قبل از شروع');
+  initStore();
+  var hashTab = (location.hash || '').replace('#', '');
+  showTab(TABS.indexOf(hashTab) >= 0 ? hashTab : (lsGet('recomp.tab') || 'train'));
+  renderSession(); renderHistory(); renderBody();
+
+  /* نسخه‌ی نصبی (فقط وقتی از آدرس اینترنتی باز شده) */
+  if (!window.AndroidBridge && 'serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    navigator.serviceWorker.register('./sw.js').catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>
